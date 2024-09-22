@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Data Input</title>
+    </head>
+    <style>
+        body {
+            background-image: url('bg.gif');
+            background-color: #000; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #alert{
+            align-items: center;
+        }
+        .starter-container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #open-btn {
+            background-color: rgb(255, 0, 0); 
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 60px 60px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            display: block; 
+            margin: 10px auto;
+            position: relative; 
+            animation: colorChange 3s infinite;
+        }
+
+        @keyframes colorChange {
+            0% { background-color: rgb(255, 0, 0); } 
+            33% { background-color: rgb(0, 255, 0); } 
+            66% { background-color: rgb(0, 0, 255); } 
+            100% { background-color: rgb(255, 0, 0); } 
+        }
+
+        #open-btn:hover {
+            background-color: #3e8e41;
+        }
+
+        #contact-container {
+            background-image: url(pixel.jpg);
+            background-size: 100% 100%;
+            border-radius: 30px 60px;
+            justify-content: center;
+            display: none;
+            position:fixed;
+            left: 50%;
+            right: 50%;
+            top: 10%;
+            bottom: 15%;
+            transform: translate(-50%, 5%);
+            border: 3px solid #999999;
+            z-index: 9;
+            background-color: #999999;
+            width: 700px; 
+            height: 600px; 
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            filter: blur(5px);
+        }
+
+        .alert{
+            text-align: center;
+            font-size:xx-large
+        }
+
+        h1 {
+            text-align: center;
+            font-size: medium;
+        }
+
+        .inputBox {
+            margin-bottom: 20px;
+        }
+
+        .inputBox input {
+            width: 94%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            border-radius: 40px 60px;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .inputBox textarea{
+            width: 94%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            justify-content: center;
+            margin-left: 10px;
+        }
+
+        .inputBox input:focus, .inputBox textarea:focus {
+            border-color: #4CAF50;
+        }
+
+        .inputBox button[type="submit"] {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            display: block; 
+            margin: 0 auto; 
+        }
+
+        .inputBox button[type="submit"]:hover {
+            background-color: #3e8e41;
+        }
+
+    </style>
+    <body>
+        <div class="starter-container">
+            <button id="open-btn">Click to open</button>
+        </div>
+        
+        <div class="overlay" id="overlay"></div>
+        
+        <div class="container" id="contact-container">
+            <form action="" id="contactForm">  
+            
+            <br>
+            <div class="alert">Welcome To Suggestion Box</div>
+                <br>
+
+            <div class="inputBox">
+                <h1>Name</h1>
+                <input type="text" id="name" placeholder="Name (Optional)">
+            </div> 
+                
+            <div class="inputBox">
+                <h1>Email</h1>
+                <input type="email" id="email" placeholder="Email (Optional)">
+            </div> 
+                
+            <div class="inputBox">
+                <h1>Student ID</h1>
+                <input type="text" id="studId" placeholder="Student ID" required>
+            </div> 
+        
+            <div class="inputBox">
+                <textarea id="MsgContent" cols="40" rows="10" placeholder="Your Message that you want to say" required></textarea>
+            </div> 
+        
+            <div class="inputBox">
+                <button type="submit">Submit</button>
+            </div> 
+        
+            </form>  
+        </div>
+            </form>  
+        </div>
+    </body>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>  
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
+  <script>
+    firebase.initializeApp({
+    apiKey: 'AIzaSyBIrOPXXekMWli0y-0NvQ5KmWQ2kssJrNw',
+    authDomain: 'data-b738a.firebaseapp.com',
+    databaseURL: 'https://data-b738a-default-rtdb.firebaseio.com',
+    projectId: 'data-b738a',
+    storageBucket: 'data-b738a.appspot.com',
+    messagingSenderId: '390422282553',
+    });
+
+    var database = firebase.database();
+
+    var form = document.getElementById('contactForm');
+    var nameInput = document.getElementById('name');
+    var emailInput = document.getElementById('email');
+    var studIdInput = document.getElementById('studId');
+    var msgContentInput = document.getElementById('MsgContent');
+
+    form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    var name = nameInput.value;
+    var email = emailInput.value;
+    var studId = studIdInput.value;
+    var msgContent = msgContentInput.value;
+
+    var timestamp = new Date().toLocaleString();
+
+    var newData = {
+        name: name,
+        email: email,
+        studId: studId,
+        msgContent: msgContent,
+        timestamp: timestamp,
+    };
+
+    database.ref('messages').push(newData);
+
+    document.querySelector('.alert').innerHTML = 'Your message has been sent!';
+    document.querySelector('.alert').style.display = 'block';
+    form.reset()
+    });
+
+    document.getElementById('open-btn').addEventListener('click', function() {
+    document.getElementById('contact-container').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+    });
+
+    document.getElementById('overlay').addEventListener('click', function() {
+    document.getElementById('contact-container').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    });
+
+  </script>
+</html>
