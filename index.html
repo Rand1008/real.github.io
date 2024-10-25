@@ -7,7 +7,7 @@
     </head>
     <style>
         body {
-            background-image: url('bg.gif');
+            background-image: url('sam.jpg');
             background-color: #000; 
             background-size: cover;
             background-position: center;
@@ -52,7 +52,7 @@
         }
 
         #contact-container {
-            background-image: url(pixel.jpg);
+            background-image: url(https://img.freepik.com/premium-photo/pencils-red-container-with-pencil-wall_953680-1819.jpg);
             background-size: 100% 100%;
             border-radius: 30px 60px;
             justify-content: center;
@@ -135,8 +135,16 @@
             background-color: #3e8e41;
         }
 
+
     </style>
     <body>
+        <audio id="backgroundAudio" autoplay loop>
+            <source src="die with a smile.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+
+        <button id="toggleButton" onclick="toggleAudio()">Play</button>
+
         <div class="starter-container">
             <button id="open-btn">Click to open</button>
         </div>
@@ -168,6 +176,7 @@
             <div class="inputBox">
                 <textarea id="MsgContent" cols="40" rows="10" placeholder="Your Message that you want to say" required></textarea>
             </div> 
+        
         
             <div class="inputBox">
                 <button type="submit">Submit</button>
@@ -232,6 +241,36 @@
     document.getElementById('contact-container').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
     });
+
+    var audio = document.getElementById("backgroundAudio");
+    var button = document.getElementById("toggleButton");
+
+    function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                button.textContent = "Pause";  
+            } else {
+                audio.pause();
+                button.textContent = "Play";   
+            }
+        }
+        var images = [
+            'sam.jpg', 
+            'Robin.jpg',
+            'stellfly.png',
+            'animation.gif',
+            'download.gif',
+            'hsr.gif'
+        ];
+
+        var currentIndex = 0;
+
+        function changeBackground() {
+            currentIndex = (currentIndex + 1) % images.length; 
+            document.body.style.backgroundImage = `url('${images[currentIndex]}')`;
+        }
+
+        setInterval(changeBackground, 10000);
 
   </script>
 </html>
